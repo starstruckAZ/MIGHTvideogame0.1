@@ -1,3 +1,26 @@
-# Godot 4+ specific ignores
+# Godot-specific ignores
+.import/
 .godot/
-/android/
+export.cfg
+export_presets.cfg
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# System/tool-specific ignores
+.DS_Store
+*.swp
+*~
+.directory
+
+# Large files and temporary downloads
+*.crdownload
+*.tmp
+*.temp
+*.bak
+
+# Ignore files larger than 50MB
+# Use Git LFS for these files
