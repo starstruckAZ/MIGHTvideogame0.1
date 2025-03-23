@@ -1,68 +1,85 @@
-# MIGHT
+# Midnight Malice
 
-A fast-paced side-scrolling action game inspired by Ninja Gaiden, Katana Zero, and The Messenger.
+A 2D action platformer game with dynamic combat mechanics and visual feedback.
 
-## Overview
+## Game Overview
 
-"Might" is a precision-based side-scrolling action game where players control a skilled warrior in a world blending traditional Japanese aesthetics with dark fantasy elements. The game focuses on fast-paced combat, precise platforming, and fluid movement mechanics.
+Midnight Malice is a side-scrolling action platformer where players control a martial artist fighting through levels filled with enemies. The game features a polished combat system with combo attacks, projectiles, and dramatic visual effects for a satisfying gameplay experience.
 
-## Game Features
+## Features
 
-- **Fluid Combat System**:
-  - Combo-based attacks with two distinct attack animations
-  - Run-and-slash capability for seamless combat while moving
-  - Special projectile attacks when at full health
+### Player Mechanics
+- Fluid movement system with acceleration and deceleration
+- Advanced jump mechanics (double jump, wall slide, wall jump)
+- Dash ability with cooldown
+- Two-stage combo melee attack system
+- Special projectile attack at full health
+- Dynamic hit reactions and knockback
 
-- **Advanced Movement Mechanics**:
-  - Double jump for extended aerial control
-  - Wall sliding and wall jumping
-  - Quick dash with invincibility frames
+### Enemy System
+- Multiple enemy types with unique behaviors
+- Advanced AI with detection, chase, and attack states
+- Melee and ranged attack capabilities
+- Visual feedback when taking damage
+- Advanced knockback and hit reactions
 
-- **Character Progression**:
-  - Health system with visual feedback
-  - Invincibility frames after taking damage
-  - Special abilities unlocked at full health
+### Combat System
+- Impact-based combat with satisfying knockback effects
+- Time slowdown effects on powerful hits
+- Visual flash effects for hit feedback
+- Projectiles that pass through terrain
+- Enhanced recoil and physics for engaging combat feel
 
-- **Visual Effects**:
-  - Dynamic particle effects for movement (jumps, runs, dash)
-  - Combat effects including sword slashes and projectiles
-  - Visual feedback for player state (damage, invincibility)
-
-- **Polish & Environment**:
-  - Challenging platforming sections
-  - Visually striking environments with parallax backgrounds
-  - Atmospheric soundtrack enhancing gameplay
-  - Progressive difficulty curve with skill-based advancement
+### Game Systems
+- Health system with visual feedback
+- Score system with points for defeating enemies
+- Health bonuses at score milestones
+- Game HUD with health, energy, and score display
 
 ## Controls
 
-- **Movement**: A/D or Left/Right Arrow keys
-- **Jump**: Space or Up Arrow (press twice for double jump)
-- **Attack**: J or Left Mouse Button
-- **Dash**: Shift key
-- **Wall Jump**: Jump while sliding on a wall
-- **Test Damage**: H key (for testing)
-- **Test Death**: K key (for testing)
+- **A/D or Left/Right Arrow**: Move left/right
+- **W or Up Arrow**: Jump (press twice for double jump)
+- **S or Down Arrow**: Duck (not implemented yet)
+- **Space**: Attack (tap again for combo)
+- **Shift**: Dash
+- **E**: Special attack (when at full health)
 
-## Development
+## Development Status
 
-Built with Godot Engine 4.4.
+The game is currently in alpha development. See the [Roadmap](ROADMAP.md) for more details on development progress and future plans.
 
-### Prerequisites
+## Technical Details
 
-- Godot Engine 4.4 or higher
+### Requirements
+- Godot Engine 4.x
 
-### Installation
+### Project Structure
+- `scripts/`: Contains all game logic scripts
+  - `Player.gd`: Player character controller
+  - `Enemy.gd`: Base enemy class
+  - `Enemy1.gd`, `Enemy2.gd`, `Enemy3.gd`: Specific enemy implementations
+  - `Projectile.gd`: Projectile behavior
+  - `GameManager.gd`: Core game state management
+- `scenes/`: Contains game scenes
+  - `Player.tscn`: Player character scene
+  - `Main.tscn`: Main game scene
+  - `enemies/`: Enemy scene files
+  - `effects/`: Visual effect scenes
+- `Assets/`: Game assets including sprites and sounds
 
-1. Clone this repository
-2. Open the project in Godot Engine
-3. Run the game
+### Collision System
+The game uses the following collision layers:
+- Layer 1: World/Terrain
+- Layer 2: Player
+- Layer 3: Enemies
+- Layer 4: Projectiles
 
 ## Credits
 
-- Game developed by [Your Name/Team]
-- Art assets include work from various sources (see license.txt in Assets folder)
+- Game Development: [Your Name/Team]
+- Sprite Assets: [Asset Sources]
 
 ## License
 
-[License information] 
+[License details] 

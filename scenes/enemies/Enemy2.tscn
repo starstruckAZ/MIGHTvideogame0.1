@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=3 uid="uid://5fjdsfejd2nc"]
+
+[ext_resource type="Script" uid="uid://cx77krv1suxra" path="res://scripts/Enemy2.gd" id="1_mxwtc"]
+[ext_resource type="Texture2D" uid="uid://mm7vsy75iqys" path="res://Assets/Sprites/Enemies/2/Idle.png" id="2_ib87h"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_m2qvd"]
+radius = 15.0
+height = 56.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qnlr7"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4j1e"]
+radius = 200.0
+
+[node name="Enemy2" type="CharacterBody2D"]
+position = Vector2(-1, 0)
+collision_layer = 4
+collision_mask = 11
+script = ExtResource("1_mxwtc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -2.775)
+scale = Vector2(1.12, 1.12)
+texture = ExtResource("2_ib87h")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -28)
+shape = SubResource("CapsuleShape2D_m2qvd")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(0, -30)
+scale = Vector2(0.87, 0.87)
+shape = SubResource("CircleShape2D_qnlr7")
+
+[node name="AttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(0, -30)
+scale = Vector2(0.27, 0.27)
+shape = SubResource("CircleShape2D_g4j1e")
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(0, -29.11)
+scale = Vector2(1.63, 1.63)
+shape = SubResource("CapsuleShape2D_m2qvd")
+
+[node name="ProjectileOrigin" type="Marker2D" parent="."]
+position = Vector2(22, -30)
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_entered" from="HitBox" to="." method="_on_hit_box_body_entered"]

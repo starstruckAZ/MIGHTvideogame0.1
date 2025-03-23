@@ -1,212 +1,134 @@
-# "Might" - Product Requirements Document
+# Midnight Malice - Product Requirements Document
 
-## 1. Introduction
+## Game Overview
 
-### 1.1 Purpose
-This document outlines the comprehensive requirements for "Might," a 2D side-scrolling action game developed in Godot 4.4. It serves as the definitive reference for all game features, mechanics, and design considerations.
+Midnight Malice is a 2D side-scrolling action platformer with combat elements. The player controls a martial artist character fighting through levels filled with enemies, collecting points and power-ups along the way.
 
-### 1.2 Game Vision
-"Might" aims to capture the precision and fluidity of classic side-scrolling action games like Ninja Gaiden, Katana Zero, and The Messenger, while establishing its own unique identity through distinctive art direction, combat mechanics, and narrative elements.
+## Target Audience
+- Primary: Action game enthusiasts, ages 13-35
+- Secondary: Platformer fans, retro game enthusiasts
+- Platforms: PC (Windows, Mac, Linux), with potential for console ports
 
-### 1.3 Target Audience
-- Primary: Action game enthusiasts aged 16-35 who appreciate challenging gameplay
-- Secondary: Fans of retro-inspired games with modern mechanics
-- Tertiary: Players interested in games with Japanese aesthetic influences
+## Core Gameplay Requirements
 
-## 2. Core Gameplay
+### Player Character
 
-### 2.1 Player Character
+#### Movement
+- Horizontal movement with acceleration and friction
+- Jumping with variable height based on button press duration
+- Double jump ability
+- Wall sliding and wall jumping
+- Dash ability with cooldown
 
-#### 2.1.1 Movement
-- Walking/running with variable speed (300 units/sec)
-- Jumping with variable height (jump velocity of -400)
-- Double jumping with 80% height of initial jump
-- Wall-sliding and wall-jumping with cooldown
-- Dash ability with brief invincibility frames (800 units/sec for 0.2 seconds)
-- Air control allowing mid-air direction changes
+#### Combat
+- Melee attacks with combo system
+- Special attacks when at full health
+- Projectile attack option (fires through terrain)
+- Damage invincibility frames after being hit
+- Impactful knockback system for satisfying combat feel
+- Visual hit effects and screen shake
+- Brief time slowdown on impactful hits (hit pause)
 
-#### 2.1.2 Combat
-- **Basic Attack System**:
-  - Two-part combo system with distinct animations
-  - First attack with quick sword slash
-  - Second attack triggered after repeated attacks within time window
-  - Random chance to trigger special attack on second hit
-  - Ability to attack while running or in mid-air
+### Enemies
 
-- **Health System**:
-  - 100 maximum health points
-  - Visual health bar UI
-  - Invincibility frames after taking damage (0.6 seconds)
-  - Visual feedback when damaged (character flashes)
+#### Basic Enemy Structure
+- All enemies inherit from base Enemy class
+- Enemies must be in the "enemy" group
+- Enemies emit "enemy_defeated" signal when defeated
+- Enemies have visual feedback when taking damage
 
-- **Special Abilities**:
-  - Energy projectile attack when at full health
-  - Projectiles travel in facing direction
-  - Visual effects for projectile trails and impacts
+#### Enemy Types
+- **Enemy1**: Basic enemy, 50 points, low health/damage
+- **Enemy2**: Medium enemy, 100 points, average health/damage
+- **Enemy3**: Advanced enemy, 150 points, high health/damage
+- Future enemy types will follow similar pattern with unique abilities
 
-#### 2.1.3 Visual Effects
-- Dust particles for running, jumping, and dashing
-- Slash effects during attacks
-- Projectile trails and explosion effects
-- Character flashing during invincibility
-- Death animation with proper transitions
+#### Enemy Behavior
+- Idle state with random patrols
+- Detection radius for player awareness
+- Chase state when player is detected
+- Attack state when in range
+- Hurt and death states
+- Melee and ranged attack capabilities
+- Visual feedback during attacks and when taking damage
 
-### 2.2 Enemy Design
+### Game Systems
 
-#### 2.2.1 Enemy Types
-- Basic Melee: Standard enemies with simple attack patterns
-- Ranged: Enemies that attack from a distance
-- Elite: More challenging enemies with complex attack patterns
-- Mini-Bosses: Unique enemies with specific mechanics
-- Bosses: Major encounters with multiple phases and distinct patterns
+#### Health System
+- Player has 100 max health by default
+- Health is reduced by enemy attacks
+- Health can be restored through pickups or score milestones
+- **NO floating health bars** above player's head
+- Death occurs when health reaches 0
 
-#### 2.2.2 Enemy Behaviors
-- Patrol patterns
-- Detection and pursuit mechanics
-- Varied attack patterns
-- Defensive maneuvers
-- Environmental interaction
+#### Combat Feedback System
+- Dynamic knockback based on attack strength
+- Visual flash effects on hit
+- Enemy recoil when attacking player
+- Brief time dilation for impactful hits
+- Upward knockback component for dramatic effect
 
-### 2.3 Level Design
+#### Score System
+- Different enemy types give different point values
+- Every 500 points, player gains +10 health (up to max)
+- Score is displayed in the Game HUD
+- High scores will be saved (future implementation)
 
-#### 2.3.1 Structure
-- Linear progression with branching paths for exploration
-- Checkpoint system for progression saving
-- Hidden areas rewarding exploration
-- Environmental hazards and obstacles
-- Platforming challenges integrated with combat areas
+#### Game HUD
+- Health bar in the UI (not above player)
+- Energy/special attack bar
+- Current score display
+- Visual indicators for ability cooldowns (future)
 
-#### 2.3.2 Environment Interaction
-- Destructible objects
-- Interactive elements (switches, moving platforms)
-- Environmental hazards (spikes, pits, etc.)
-- Vertical design elements encouraging exploration
+## Technical Requirements
 
-## 3. Technical Requirements
+### Architecture
+- Game built in Godot Engine
+- Signal-based communication between components
+- GameManager singleton for game state management
+- Scene-based structure for modularity
 
-### 3.1 Graphics
-- Resolution: Support for multiple resolutions (minimum 1920x1080)
-- Art style: Blend of pixel art with modern effects
-- Visual effects for impacts, abilities, and environmental elements
-- Smooth animations for player character, enemies, and environment
-- Parallax backgrounds for depth
+### Performance Targets
+- 60 FPS on mid-range hardware
+- Efficient collision detection
+- Optimized animations and effects
 
-### 3.2 Audio
-- Dynamic soundtrack that responds to gameplay intensity
-- Sound effects for all player actions and enemy behaviors
-- Environmental audio for immersion
-- Voice acting for key narrative moments (optional)
+### Art Style
+- 2D pixel art with modern touches
+- Fluid character animations
+- Distinct visual style for each enemy type
+- Atmospheric background parallax
 
-### 3.3 Performance
-- Target frame rate: 60 FPS on recommended hardware
-- Optimization for various hardware configurations
-- Minimal loading times between levels
+### Audio
+- Sound effects for all player actions
+- Enemy sound effects
+- Background music that changes with gameplay intensity
+- Audio mixing for proper balance
 
-## 4. Game Progression
+## Future Considerations
 
-### 4.1 Skill Development
-- Unlock new abilities through gameplay progression
-- Upgrade system for existing abilities
-- Skill tree or similar progression mechanism
+### Expandability
+- Design for easy addition of new enemy types
+- Level editor possibility
+- Modding support potential
 
-### 4.2 Level Progression
-- 5-7 distinct levels/environments
-- Increasing difficulty curve
-- New mechanics introduced gradually
-- Boss encounters as skill checks
+### Monetization
+- Base game with potential for DLC content
+- Cosmetic options
+- No pay-to-win mechanics
 
-### 4.3 Narrative Elements
-- Minimalist storytelling through environment and limited dialogue
-- Main storyline advancing through level progression
-- Optional lore elements discoverable through exploration
+## Quality Assurance
 
-## 5. User Interface
+### Target Metrics
+- Bug-free gameplay
+- Consistent frame rate
+- Intuitive controls
+- Balanced difficulty
 
-### 5.1 HUD Elements
-- **Health Bar**:
-  - Visual representation of current/maximum health
-  - Color changes at low health (red pulsing effect)
-  - Positioned at top of screen
-- Special ability cooldowns/resources
-- Minimal on-screen indicators
-- Optional combo counter
-- Boss health bars when relevant
+### Testing Strategy
+- Automated unit tests for core systems
+- Playtest sessions with target audience
+- Beta testing phase before release
 
-### 5.2 Menus
-- Main menu with options, continue, new game
-- Pause menu with resume, options, quit
-- Options menu with audio, visual, and control settings
-- Minimal inventory/equipment screen if applicable
-
-## 6. Accessibility
-
-### 6.1 Controls
-- **Primary Controls**:
-  - Movement: A/D or Arrow keys
-  - Jump: Space or Up Arrow
-  - Attack: J or Left Mouse Button
-  - Dash: Shift key
-  - Wall Jump: Jump while sliding on a wall
-- Fully remappable controls
-- Controller support
-- Keyboard and mouse support
-- Adjustable sensitivity
-
-### 6.2 Difficulty Options
-- Multiple difficulty levels
-- Option to adjust specific game parameters (damage taken, enemy aggression)
-- Assist features for less experienced players
-
-## 7. Monetization (if applicable)
-
-### 7.1 Business Model
-- Premium game with one-time purchase
-- Potential for DLC expansions with additional content
-- No microtransactions affecting gameplay
-
-## 8. Development Milestones
-
-### 8.1 Prototype Phase (Completed)
-- Core movement mechanics
-- Basic combat system
-- Test level for mechanics validation
-
-### 8.2 Alpha Phase (Current)
-- Complete player character functionality
-- Enhanced movement mechanics (double jump, wall jump, dash)
-- Advanced combat features (combo system, projectiles)
-- Visual feedback systems
-- UI elements (health bar)
-
-### 8.3 Beta Phase (Upcoming)
-- All levels in basic form
-- Complete enemy roster
-- Full progression system
-- Initial balancing
-
-### 8.4 Release Candidate
-- Complete game content
-- Polished visuals and audio
-- Bug fixes and optimization
-- Final balancing
-
-## 9. Post-Launch Support
-
-### 9.1 Updates
-- Bug fixes and balance adjustments
-- Performance optimizations
-- Potential content updates
-
-### 9.2 Community Engagement
-- Feedback integration process
-- Community challenges or events
-- Speedrunning support
-
-## 10. Technical Implementation Guidelines
-
-### 10.1 Godot-Specific Requirements
-- Proper scene hierarchy organization
-- Efficient resource management
-- Consistent coding standards
-- Version control practices
-- Performance optimization guidelines 
+## Development Timeline
+- See ROADMAP.md for detailed development timeline and milestones 
