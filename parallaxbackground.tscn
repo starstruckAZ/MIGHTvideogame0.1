@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://d25rsiobsvetv"]
+
+[ext_resource type="Texture2D" uid="uid://dg7an3gemvlvq" path="res://Assets/Sprites/background 1/orig_big.png" id="1_54h3r"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="OrigBig" type="Sprite2D" parent="ParallaxBackground"]
+position = Vector2(829, 454.75)
+scale = Vector2(0.716146, 0.697917)
+texture = ExtResource("1_54h3r")

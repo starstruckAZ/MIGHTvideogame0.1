@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://cv6xtevlkn2nw"]
+
+[ext_resource type="Script" path="res://scenes/effects/SlashEffect.gd" id="1_g1bcr"]
+[ext_resource type="Texture2D" uid="uid://dc2jtij38pf03" path="res://Assets/Effects/slash.png" id="2_5qd76"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ocln"]
+atlas = ExtResource("2_5qd76")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rrja"]
+atlas = ExtResource("2_5qd76")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw5pe"]
+atlas = ExtResource("2_5qd76")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5iit"]
+atlas = ExtResource("2_5qd76")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jltse"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ocln")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rrja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uw5pe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5iit")
+}],
+"loop": false,
+"name": &"slash",
+"speed": 15.0
+}]
+
+[node name="SlashEffect" type="AnimatedSprite2D"]
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_jltse")
+animation = &"slash"
+script = ExtResource("1_g1bcr") 

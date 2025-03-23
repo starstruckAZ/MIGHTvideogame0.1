@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c82iyq5xitl62"]
+
+[ext_resource type="Script" path="res://scenes/effects/Projectile.gd" id="1_t0ddu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ck2tv"]
+radius = 8.0
+
+[sub_resource type="Gradient" id="Gradient_d2faq"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(0.972549, 0.972549, 0.109804, 1, 0.941176, 0.419608, 0.0666667, 1, 0.847059, 0.0666667, 0.0666667, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vq1xt"]
+gradient = SubResource("Gradient_d2faq")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.9, 0.1)
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_t0ddu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ck2tv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_vq1xt")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="LifetimeTimer" to="." method="_on_lifetime_timer_timeout"] 
