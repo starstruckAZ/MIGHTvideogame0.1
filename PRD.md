@@ -24,6 +24,7 @@ Midnight Malice is a 2D side-scrolling action platformer with combat elements. T
 - Melee attacks with combo system
 - Special attacks when at full health
 - Projectile attack option (fires through terrain)
+- Projectiles deal 3x damage of regular attacks
 - Damage invincibility frames after being hit
 - Impactful knockback system for satisfying combat feel
 - Visual hit effects and screen shake
@@ -36,6 +37,7 @@ Midnight Malice is a 2D side-scrolling action platformer with combat elements. T
 - Enemies must be in the "enemy" group
 - Enemies emit "enemy_defeated" signal when defeated
 - Enemies have visual feedback when taking damage
+- Enemies have increased health (8x) to balance against powerful projectiles
 
 #### Enemy Types
 - **Enemy1**: Basic enemy, 50 points, low health/damage
@@ -51,6 +53,20 @@ Midnight Malice is a 2D side-scrolling action platformer with combat elements. T
 - Hurt and death states
 - Melee and ranged attack capabilities
 - Visual feedback during attacks and when taking damage
+
+### Power-up System
+
+#### Power-up Types
+- **Health Power-up**: Restores player health
+- **Shield Power-up**: Provides temporary invincibility
+- **Projectile Power-up**: Grants special attack and auto-fires a projectile
+
+#### Power-up Behavior
+- Power-ups are animated with visual feedback
+- Collected on contact with player
+- Provide immediate effects when collected
+- Distributed throughout levels at strategic points
+- Visual and audio feedback on collection
 
 ### Game Systems
 

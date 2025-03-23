@@ -4,8 +4,8 @@ class_name Enemy
 signal enemy_defeated
 
 # Common enemy properties
-var max_health = 100
-var health = 100
+var max_health = 800
+var health = 800
 var attack_damage = 10
 var move_speed = 100.0
 var detection_radius = 250.0
@@ -234,6 +234,10 @@ func attack():
 	can_attack = false
 	attack_timer = attack_cooldown
 	
+	# Play attack sound
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sound("enemy_attack", 0.7, 0.9 + randf() * 0.2)
+	
 	# Enable attack hitbox
 	if attack_area:
 		# Make sure attack area is properly positioned
@@ -270,6 +274,10 @@ func take_damage(amount, knockback_direction = Vector2.ZERO, knockback_strength 
 	health -= amount
 	print("Enemy health: ", health, "/", max_health)
 	
+	# Play hit sound
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sound("enemy_hit", 0.8, 0.9 + randf() * 0.2)
+	
 	# Apply enhanced knockback
 	if knockback_direction != Vector2.ZERO:
 		# Add upward component for more visible knockback
@@ -295,6 +303,10 @@ func take_damage(amount, knockback_direction = Vector2.ZERO, knockback_strength 
 		print("Enemy killed!")
 		# Instantly transition to death state
 		current_state = DEATH
+		
+		# Play death sound
+		if has_node("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("enemy_death", 1.0)
 		
 		# Final dramatic knockback on death
 		velocity = velocity * 1.5
@@ -326,6 +338,10 @@ func take_damage(amount, knockback_direction = Vector2.ZERO, knockback_strength 
 func die():
 	current_state = DEATH
 	print("Enemy died!")
+	
+	# Play death sound
+	if has_node("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sound("enemy_death", 1.0)
 	
 	# Emit signal that enemy was defeated with self as parameter
 	emit_signal("enemy_defeated", self)

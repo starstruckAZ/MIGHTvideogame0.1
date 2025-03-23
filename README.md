@@ -22,6 +22,8 @@ Midnight Malice is a side-scrolling action platformer where players control a ma
 - Melee and ranged attack capabilities
 - Visual feedback when taking damage
 - Advanced knockback and hit reactions
+- Enhanced health for challenging combat
+- Balanced design with 8x health to match stronger player attacks
 
 ### Combat System
 - Impact-based combat with satisfying knockback effects
@@ -29,6 +31,16 @@ Midnight Malice is a side-scrolling action platformer where players control a ma
 - Visual flash effects for hit feedback
 - Projectiles that pass through terrain
 - Enhanced recoil and physics for engaging combat feel
+- Powerful projectile attacks with 3x damage of regular attacks
+- Visual trail effects on projectiles for better feedback
+
+### Power-up System
+- Multiple power-up types with unique effects
+- Health power-up to restore player health
+- Shield power-up for temporary invincibility
+- Projectile power-up that instantly fires a powerful attack
+- Animated power-up icons with visual feedback
+- Power-ups distributed throughout levels
 
 ### Game Systems
 - Health system with visual feedback
@@ -43,7 +55,7 @@ Midnight Malice is a side-scrolling action platformer where players control a ma
 - **S or Down Arrow**: Duck (not implemented yet)
 - **Space**: Attack (tap again for combo)
 - **Shift**: Dash
-- **E**: Special attack (when at full health)
+- **E or F**: Special attack (when at full health)
 
 ## Development Status
 

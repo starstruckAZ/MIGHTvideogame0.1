@@ -1,11 +1,14 @@
 extends CharacterBody2D
 
+# Add reference to Projectile class
+const Projectile = preload("res://scripts/Projectile.gd")
+
 # Player Constants
-const SPEED = 300.0
+const SPEED = 400.0
 const JUMP_VELOCITY = -400.0
-const ACCELERATION = 20.0
+const ACCELERATION = 40.0
 const FRICTION = 15.0
-const DASH_SPEED = 750.0
+const DASH_SPEED = 850.0
 const DASH_DURATION = 0.2
 const DASH_COOLDOWN = 1.5
 const WALL_SLIDE_SPEED = 100.0
@@ -13,7 +16,7 @@ const WALL_JUMP_VELOCITY = Vector2(350, -350)
 const GRAVITY_SCALE = 1.0
 const GRAVITY = 980
 const TERMINAL_VELOCITY = 600
-const DOUBLE_JUMP_FACTOR = 0.8  # Second jump is 80% of normal height
+const DOUBLE_JUMP_FACTOR = 0.9  # Second jump is 80% of normal height
 const WALL_JUMP_COOLDOWN = 0.1
 
 # Collision layers
@@ -106,6 +109,7 @@ var health = 100
 var invincibility_time = 1.0
 var is_invincible = false
 var invincibility_timer = 0.0
+var was_on_floor = false
 
 # Animation variables
 var current_animation = ""
@@ -126,6 +130,9 @@ var dash_effect_scene = null
 var hit_effect_scene = null
 
 func _ready():
+	# Add player to the player group for collision detection
+	add_to_group("player")
+	
 	# Set initial health
 	health = max_health
 	
@@ -137,6 +144,17 @@ func _ready():
 	emit_signal("health_changed", health)
 	emit_signal("dash_ready_changed", true)
 	emit_signal("special_ready_changed", true)
+	
+	# Setup projectile spawn point if it doesn't exist
+	if !has_node("ProjectileSpawn"):
+		var spawn = Marker2D.new()
+		spawn.name = "ProjectileSpawn"
+		spawn.position = Vector2(40, -10)  # Adjust position as needed (right in front, slightly above center)
+		add_child(spawn)
+		projectile_spawn = spawn
+		print("Created ProjectileSpawn node")
+	else:
+		projectile_spawn = get_node("ProjectileSpawn")
 	
 	# Setup attack area
 	if has_node("AttackArea"):
@@ -268,6 +286,12 @@ func _physics_process(delta):
 	if !was_on_floor and is_on_floor() and velocity.y >= 0:
 		# We just landed, adjust position firmly to the ground
 		position.y = floor(position.y)
+		# Play landing sound
+		if get_node_or_null("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("player_land", 0.7)
+	
+	# Update floor state for next frame
+	was_on_floor = is_on_floor()
 	
 	# Force player to stop at the floor
 	if is_on_floor():
@@ -330,6 +354,9 @@ func handle_movement(delta):
 			velocity.y = JUMP_VELOCITY
 			current_state = PlayerState.JUMP
 			can_double_jump = true  # Enable double jump when jumping from ground
+			# Play jump sound
+			if get_node_or_null("/root/AudioManager") != null:
+				get_node("/root/AudioManager").play_sound("player_jump", 0.8)
 	
 	# Apply gravity
 	apply_gravity(delta)
@@ -343,8 +370,8 @@ func handle_movement(delta):
 		initiate_attack()
 	
 	# Handle special attack (projectile)
-	if Input.is_action_just_pressed("ui_special"):
-		print("Special key pressed, health: ", health, "/", max_health)
+	if Input.is_action_just_pressed("ui_special") or Input.is_key_pressed(KEY_F):
+		print("Special attack key pressed, health: ", health, "/", max_health)
 		if health >= max_health:
 			print("Activating special attack!")
 			_on_special_attack_activated()
@@ -451,6 +478,10 @@ func initiate_dash():
 	is_attacking = false
 	emit_signal("dash_ready_changed", false)
 	
+	# Play dash sound
+	if get_node_or_null("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sound("player_dash", 0.8)
+	
 	# Dash in the facing direction or the input direction if any
 	var input_direction = Input.get_axis("ui_left", "ui_right")
 	if input_direction != 0:
@@ -519,6 +550,10 @@ func handle_dash(delta):
 func initiate_attack():
 	current_state = PlayerState.ATTACK
 	is_attacking = true
+	
+	# Play attack sound
+	if get_node_or_null("/root/AudioManager"):
+		get_node("/root/AudioManager").play_sound("player_attack", 0.8)
 	
 	# Handle attack combo
 	if attack_combo > 0 and attack_combo_timer > 0:
@@ -715,14 +750,7 @@ func on_animation_finished():
 			# Disable attack area with a small delay to ensure collisions are processed
 			if attack_area and is_inside_tree():
 				var disable_timer = get_tree().create_timer(0.1)
-				disable_timer.timeout.connect(func():
-					print("Disabling attack area after delay")
-					attack_area.monitoring = false
-					attack_area.monitorable = false
-					if attack_area.has_node("CollisionShape2D"):
-						var col_shape = attack_area.get_node("CollisionShape2D")
-						col_shape.set_deferred("disabled", true)
-				)
+				disable_timer.timeout.connect(_on_disable_attack_area)
 		PlayerState.HIT:
 			# When hit animation finishes, return to idle or fall
 			if is_on_floor():
@@ -763,6 +791,10 @@ func take_damage(damage, attacker_position = null):
 		
 	health -= damage
 	
+	# Play hit sound
+	if get_node_or_null("/root/AudioManager") != null:
+		get_node("/root/AudioManager").play_sound("player_hit", 0.8)
+	
 	# Update GameManager health
 	if has_node("/root/GameManager"):
 		var game_manager = get_node("/root/GameManager")
@@ -793,7 +825,7 @@ func take_damage(damage, attacker_position = null):
 		if is_inside_tree():
 			Engine.time_scale = 0.7  # Slow down game briefly
 			var reset_timer = get_tree().create_timer(0.15 * Engine.time_scale)  # Accounting for time scale
-			reset_timer.timeout.connect(func(): Engine.time_scale = 1.0)
+			reset_timer.timeout.connect(_on_time_scale_reset)
 	
 	# Visual feedback - flash white and transparent
 	modulate = Color(1.5, 1.5, 1.5, 0.7)  # Bright flash
@@ -807,13 +839,11 @@ func take_damage(damage, attacker_position = null):
 		
 		for i in range(flash_count):
 			var flash_timer = get_tree().create_timer((i+1) * flash_duration)
-			flash_timer.timeout.connect(func(): 
-				modulate.a = 1.0 if modulate.a < 1.0 else 0.5
-			)
+			flash_timer.timeout.connect(_on_invincibility_flash)
 		
 		# Final reset at the end of invincibility
 		var final_timer = get_tree().create_timer(invincibility_time)
-		final_timer.timeout.connect(func(): modulate = Color(1, 1, 1, 1))
+		final_timer.timeout.connect(_on_invincibility_end)
 	
 	# Play hit animation
 	current_state = PlayerState.HIT
@@ -829,6 +859,11 @@ func die():
 	is_dead = true
 	current_state = PlayerState.DEATH
 	is_attacking = false
+	
+	# Play death sound
+	if get_node_or_null("/root/AudioManager") != null:
+		get_node("/root/AudioManager").play_sound("player_death", 1.0)
+	
 	# Player will be handled after death animation finishes
 
 func fire_projectile():
@@ -871,7 +906,7 @@ func fire_projectile():
 		projectile.global_position = spawn_position
 		projectile.direction = Vector2(1 if facing_right else -1, 0)
 		projectile.speed = 800  # Even faster projectile
-		projectile.damage = 80  # Increased damage projectile
+		projectile.damage = 240  # 3x the strongest slash attack (80*3)
 		projectile.source_entity = self  # Set the source entity to player
 		print("Projectile fired in direction: ", projectile.direction)
 	else:
@@ -882,7 +917,7 @@ func fire_projectile():
 		projectile.global_position = projectile_spawn.global_position
 		projectile.direction = Vector2(1 if facing_right else -1, 0)
 		projectile.speed = 800  # Even faster projectile
-		projectile.damage = 80  # Increased damage projectile
+		projectile.damage = 240  # 3x the strongest slash attack (80*3)
 		projectile.source_entity = self  # Set the source entity to player
 		print("Projectile fired in direction: ", projectile.direction)
 	
@@ -890,12 +925,16 @@ func fire_projectile():
 	modulate = Color(1.2, 1.2, 2.0)  # Blue tint
 	if is_inside_tree():
 		var tint_timer = get_tree().create_timer(0.2)
-		tint_timer.timeout.connect(func(): modulate = Color(1, 1, 1))
+		tint_timer.timeout.connect(_on_projectile_tint_end)
 
 func _on_special_attack_activated():
 	print("Special attack activated!")
 	emit_signal("special_ready_changed", false)
 	health -= 5  # Use a small amount of health to prevent spamming
+	
+	# Play projectile sound
+	if get_node_or_null("/root/AudioManager") != null:
+		get_node("/root/AudioManager").play_sound("player_projectile", 0.9)
 	
 	# Update GameManager health
 	if has_node("/root/GameManager"):
@@ -914,7 +953,7 @@ func _on_attack_area_body_entered(body):
 		
 		if body.has_method("take_damage"):
 			# Calculate attack damage based on combo
-			var attack_damage = 60 if attack_combo == 1 else 80  # Increased damage
+			var attack_damage = 60 if attack_combo == 1 else 80  # Regular melee attack damage (projectiles do 3x this amount)
 			print("Applying ", attack_damage, " damage to enemy")
 			
 			# Apply damage to enemy with knockback
@@ -931,12 +970,12 @@ func _on_attack_area_body_entered(body):
 				# Add hit pause for more impact
 				Engine.time_scale = 0.05  # Almost freeze the game momentarily
 				var reset_timer = get_tree().create_timer(0.03 * Engine.time_scale)  # Short duration
-				reset_timer.timeout.connect(func(): Engine.time_scale = 1.0)
+				reset_timer.timeout.connect(_on_time_scale_reset)
 				
 				# Add visual impact flash
 				modulate = Color(1.2, 1.2, 1.2)  # Bright flash
 				var color_timer = get_tree().create_timer(0.1)
-				color_timer.timeout.connect(func(): modulate = Color(1, 1, 1))
+				color_timer.timeout.connect(_on_attack_impact_flash_end)
 		else:
 			print("ERROR: Enemy does not have take_damage method!")
 
@@ -971,10 +1010,7 @@ func check_for_enemies_in_attack_area():
 	var ray_end = global_position + Vector2(attack_direction * 80, 0)  # 80 pixels in facing direction
 	
 	# Create physics ray query
-	var query = PhysicsRayQueryParameters2D.new()
-	query.from = ray_start
-	query.to = ray_end
-	query.collision_mask = 4  # ENEMY_LAYER (4)
+	var query = PhysicsRayQueryParameters2D.create(ray_start, ray_end, 4)
 	query.collide_with_areas = true
 	query.collide_with_bodies = true
 	
@@ -1009,3 +1045,27 @@ func update_attack_area():
 		attack_area.monitoring = true
 		attack_area.monitorable = true
 		print("Attack area enabled:", attack_area.monitoring)
+
+func _on_disable_attack_area():
+	print("Disabling attack area after delay")
+	if attack_area and is_instance_valid(attack_area):
+		attack_area.monitoring = false
+		attack_area.monitorable = false
+		if attack_area.has_node("CollisionShape2D"):
+			var col_shape = attack_area.get_node("CollisionShape2D")
+			col_shape.set_deferred("disabled", true)
+
+func _on_time_scale_reset():
+	Engine.time_scale = 1.0
+
+func _on_invincibility_flash():
+	modulate.a = 1.0 if modulate.a < 1.0 else 0.5
+
+func _on_invincibility_end():
+	modulate = Color(1, 1, 1, 1)
+
+func _on_projectile_tint_end():
+	modulate = Color(1, 1, 1)
+
+func _on_attack_impact_flash_end():
+	modulate = Color(1, 1, 1)

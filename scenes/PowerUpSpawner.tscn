@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://divynxkdnxb2m"]
+
+[ext_resource type="Script" path="res://scripts/PowerUpSpawner.gd" id="1_rxgev"]
+
+[node name="PowerUpSpawner" type="Node"]
+script = ExtResource("1_rxgev") 

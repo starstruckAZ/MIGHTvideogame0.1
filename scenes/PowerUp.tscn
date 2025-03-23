@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgkpqj28q8ip7"]
+
+[ext_resource type="Script" path="res://scripts/PowerUp.gd" id="1_r8i20"]
+[ext_resource type="Texture2D" uid="uid://c6xm7r4yiydpv" path="res://Assets/Sprites/PowerUp/Health.png" id="2_dykfx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2bfh1"]
+radius = 10.0
+
+[node name="PowerUp" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_r8i20")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_dykfx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2bfh1") 

@@ -2,11 +2,20 @@ extends Area2D
 
 class_name Projectile
 
+# NOTE: Enemies should have 8x their normal health to balance the game
+# This file contains the projectile behavior and damage calculation
+
 var direction := Vector2.RIGHT
 var speed := 200.0
 var damage := 10
 var lifetime := 5.0  # Seconds before auto-destroying
 var source_entity = null  # Store reference to the entity that shot this projectile
+
+# Trail effect properties
+var trail_enabled = true
+var trail_length = 5
+var trail_points = []
+var trail_colors = []
 
 func _ready():
 	# Connect signal for body entered if not already connected
@@ -59,10 +68,36 @@ func _ready():
 	timer.one_shot = true
 	timer.timeout.connect(queue_free)
 	timer.start()
+	
+	# Initialize trail
+	for i in range(trail_length):
+		trail_points.append(position)
+		trail_colors.append(Color(1, 0.5, 0, 0.8 - (i * 0.15)))  # Fade out
 
 func _physics_process(delta):
 	# Move in the specified direction
 	position += direction * speed * delta
+	
+	# Update trail
+	if trail_enabled:
+		trail_points.push_front(global_position)
+		if trail_points.size() > trail_length:
+			trail_points.pop_back()
+
+func _draw():
+	# Draw trail
+	if trail_enabled and trail_points.size() > 1:
+		for i in range(trail_points.size() - 1):
+			if i < trail_colors.size():
+				var start_pos = to_local(trail_points[i])
+				var end_pos = to_local(trail_points[i + 1])
+				var width = 8.0 * (1.0 - float(i) / trail_length)
+				draw_line(start_pos, end_pos, trail_colors[i], width)
+
+func _process(_delta):
+	# Force redraw every frame to update trail
+	if trail_enabled:
+		queue_redraw()
 
 func _on_body_entered(body):
 	# Skip collision with source entity
