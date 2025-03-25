@@ -17,12 +17,12 @@ func _ready():
 	super._ready()
 	
 	# Initialize Enemy2's properties
-	max_health = 60  # Medium health for ranged attacker
+	max_health = 1500  # Medium health for ranged attacker
 	health = max_health
 	attack_damage = 10
 	move_speed = 65.0
 	detection_radius = 300.0
-	attack_range = 200.0  # Larger attack range for ranged enemy
+	attack_range = 100.0  # Larger attack range for ranged enemy
 	attack_cooldown = shoot_cooldown
 	
 	# Set custom animation properties

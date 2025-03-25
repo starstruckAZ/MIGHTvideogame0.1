@@ -26,9 +26,9 @@ func _ready():
 	super._ready()
 	
 	# Initialize Enemy3's properties
-	max_health = 40  # Lower health but more agile
+	max_health = 100  # Lower health but more agile
 	health = max_health
-	attack_damage = 12
+	attack_damage = 5
 	move_speed = 110.0  # Faster movement
 	detection_radius = 280.0
 	attack_range = 70.0

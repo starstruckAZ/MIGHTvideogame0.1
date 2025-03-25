@@ -98,6 +98,10 @@ func add_score(points: int) -> void:
 		# Bonus health for every 500 points
 		player_health = min(player_health + 10, player_max_health)
 		emit_signal("player_health_changed", player_health, player_max_health)
+		
+		# Play score milestone sound
+		if has_node("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("score_increase", 1.0)
 
 func player_death() -> void:
 	player_died.emit()

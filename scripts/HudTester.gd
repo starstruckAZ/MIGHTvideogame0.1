@@ -118,6 +118,10 @@ func on_damage_pressed():
 		var new_health = max(current_health - 10, 0)
 		game_manager.update_player_health(new_health)
 		print("Player took damage. Health: ", new_health)
+		
+		# Play hit sound
+		if get_node_or_null("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("player_hit", 0.8)
 
 func on_heal_pressed():
 	if game_manager:
@@ -126,8 +130,16 @@ func on_heal_pressed():
 		var new_health = min(current_health + 15, max_health)
 		game_manager.update_player_health(new_health)
 		print("Player healed. Health: ", new_health)
+		
+		# Play heal sound
+		if get_node_or_null("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("health_pickup", 1.0)
 
 func on_add_score_pressed():
 	if game_manager:
 		game_manager.add_score(50)
-		print("Added score. Total: ", game_manager.score) 
+		print("Added score. Total: ", game_manager.score)
+		
+		# Play score sound
+		if get_node_or_null("/root/AudioManager"):
+			get_node("/root/AudioManager").play_sound("score_increase", 1.0) 

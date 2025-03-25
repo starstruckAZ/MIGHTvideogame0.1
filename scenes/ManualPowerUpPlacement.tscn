@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6an7k3bdssmo"]
+
+[ext_resource type="Script" uid="uid://gk83r2uroh5s" path="res://scripts/ManualPowerUpPlacement.gd" id="1_vbqya"]
+
+[node name="PowerUps" type="Node2D"]
+script = ExtResource("1_vbqya")

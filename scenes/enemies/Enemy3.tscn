@@ -4,14 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://c8kvpkabe6g21" path="res://Assets/Sprites/Enemies/3/Idle.png" id="2_28f1m"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j7obm"]
-radius = 14.0
-height = 52.0
+radius = 8.20895
+height = 35.8209
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nohvf"]
-radius = 250.0
+radius = 328.271
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5yxhk"]
-size = Vector2(40, 51)
+size = Vector2(23, 41)
 
 [node name="Enemy3" type="CharacterBody2D"]
 collision_layer = 4
@@ -42,7 +42,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(1, 21.585)
+position = Vector2(-4.5, 33.5)
 shape = SubResource("RectangleShape2D_5yxhk")
 
 [node name="HitBox" type="Area2D" parent="."]
@@ -50,7 +50,7 @@ collision_layer = 4
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(-1, 17.35)
+position = Vector2(-5, 30)
 scale = Vector2(1.34, 1.34)
 shape = SubResource("CapsuleShape2D_j7obm")
 

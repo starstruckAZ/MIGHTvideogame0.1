@@ -34,3 +34,10 @@ Assets/Effects/Unconfirmed*
 
 # Ignore files larger than 50MB
 # Use Git LFS for these files
+
+# Specific files
+Android/
+iOS/
+*.apk
+*.ipa
+Assets/Effects/Unconfirmed 612988.crdownload

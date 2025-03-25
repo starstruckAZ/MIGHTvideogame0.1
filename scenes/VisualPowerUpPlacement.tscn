@@ -1,0 +1,87 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/VisualPowerUpPlacement.gd" id="1_mfgcs"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/PowerUp/Health.png" id="2_fgtcv"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/PowerUp/Shield.png" id="3_1l8t2"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/PowerUp/Projectile.png" id="4_y53f4"]
+
+[node name="VisualPowerUpPlacement" type="Node2D"]
+script = ExtResource("1_mfgcs")
+
+[node name="HealthPowerUps" type="Node2D" parent="."]
+
+[node name="HealthPowerUp1" type="Sprite2D" parent="HealthPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(175, 250)
+texture = ExtResource("2_fgtcv")
+metadata/powerup_type = 0
+
+[node name="HealthPowerUp2" type="Sprite2D" parent="HealthPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(850, 150)
+texture = ExtResource("2_fgtcv")
+metadata/powerup_type = 0
+
+[node name="HealthPowerUp3" type="Sprite2D" parent="HealthPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(1750, 220)
+texture = ExtResource("2_fgtcv")
+metadata/powerup_type = 0
+
+[node name="HealthPowerUp4" type="Sprite2D" parent="HealthPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(2500, 230)
+texture = ExtResource("2_fgtcv")
+metadata/powerup_type = 0
+
+[node name="ShieldPowerUps" type="Node2D" parent="."]
+
+[node name="ShieldPowerUp1" type="Sprite2D" parent="ShieldPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(400, 180)
+texture = ExtResource("3_1l8t2")
+metadata/powerup_type = 1
+
+[node name="ShieldPowerUp2" type="Sprite2D" parent="ShieldPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(1200, 130)
+texture = ExtResource("3_1l8t2")
+metadata/powerup_type = 1
+
+[node name="ShieldPowerUp3" type="Sprite2D" parent="ShieldPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(2100, 180)
+texture = ExtResource("3_1l8t2")
+metadata/powerup_type = 1
+
+[node name="ShieldPowerUp4" type="Sprite2D" parent="ShieldPowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(3000, 190)
+texture = ExtResource("3_1l8t2")
+metadata/powerup_type = 1
+
+[node name="ProjectilePowerUps" type="Node2D" parent="."]
+
+[node name="ProjectilePowerUp1" type="Sprite2D" parent="ProjectilePowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(620, 170)
+texture = ExtResource("4_y53f4")
+metadata/powerup_type = 2
+
+[node name="ProjectilePowerUp2" type="Sprite2D" parent="ProjectilePowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(1450, 160)
+texture = ExtResource("4_y53f4")
+metadata/powerup_type = 2
+
+[node name="ProjectilePowerUp3" type="Sprite2D" parent="ProjectilePowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(2300, 150)
+texture = ExtResource("4_y53f4")
+metadata/powerup_type = 2
+
+[node name="ProjectilePowerUp4" type="Sprite2D" parent="ProjectilePowerUps"]
+modulate = Color(1, 1, 1, 0.7)
+position = Vector2(2850, 270)
+texture = ExtResource("4_y53f4")
+metadata/powerup_type = 2 

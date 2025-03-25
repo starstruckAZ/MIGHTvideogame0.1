@@ -14,7 +14,7 @@ func _ready():
 	super._ready()
 	
 	# Initialize Enemy1's properties
-	max_health = 120  # Tank enemy with high health
+	max_health = 500 # Tank enemy with high health
 	health = max_health
 	attack_damage = 15
 	move_speed = 80.0

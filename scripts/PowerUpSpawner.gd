@@ -5,13 +5,14 @@ const POWERUP_SCENE = preload("res://scenes/PowerUp.tscn")
 const PowerUp = preload("res://scripts/PowerUp.gd")
 
 # Spawn settings
-@export var powerup_count_per_type = 2  # Number of each type to spawn
+@export var powerup_count_per_type = 4  # Number of each type to spawn (doubled from 2 to 4)
 @export var min_distance_between_powerups = 200.0  # Minimum distance between powerups
 @export var edge_margin = 100.0  # Margin from level edges
 
 # Level bounds for spawning - will be calculated in _ready
 var level_bounds = Rect2()
 var spawn_positions = []
+var tilemap = null  # Reference to the tilemap
 
 func _ready():
 	# Calculate level bounds - the area where powerups can be spawned
@@ -27,7 +28,7 @@ func calculate_level_bounds():
 	var tilemaps = get_tree().get_nodes_in_group("tilemap")
 	
 	if tilemaps.size() > 0:
-		var tilemap = tilemaps[0]
+		tilemap = tilemaps[0]
 		var tilemap_rect = tilemap.get_used_rect()
 		var cell_size = tilemap.cell_size
 		
@@ -88,15 +89,33 @@ func find_valid_spawn_position():
 			if spawn_pos.distance_to(existing_pos) < min_distance_between_powerups:
 				is_valid = false
 				break
-				
+		
+		# Check if position overlaps with a tile (ensure it's not inside terrain)
+		if is_valid and tilemap != null:
+			var tile_pos = tilemap.local_to_map(spawn_pos)
+			var tile_data = tilemap.get_cell_tile_data(0, tile_pos)
+			if tile_data != null:
+				# A tile exists at this position
+				is_valid = false
+		
 		attempts += 1
 	
 	if !is_valid:
-		# If we couldn't find a valid position, just place it somewhere
-		print("Warning: Could not find valid powerup position after ", max_attempts, " attempts")
+		# If we couldn't find a valid position, try one more time with more aggressive parameters
+		print("Warning: Could not find valid powerup position after ", max_attempts, " attempts. Trying with relaxed parameters...")
+		
+		# Try again with a higher position (to avoid being in tiles)
 		spawn_pos = Vector2(
 			randf_range(level_bounds.position.x, level_bounds.end.x),
-			randf_range(level_bounds.position.y, level_bounds.end.y)
+			randf_range(level_bounds.position.y - 200, level_bounds.position.y - 100)  # Higher up from the ground
 		)
+		
+		# Check if this position is valid (not overlapping tiles)
+		if tilemap != null:
+			var tile_pos = tilemap.local_to_map(spawn_pos)
+			var tile_data = tilemap.get_cell_tile_data(0, tile_pos)
+			if tile_data != null:
+				# Still in a tile, move it up more
+				spawn_pos.y -= 50
 	
 	return spawn_pos 

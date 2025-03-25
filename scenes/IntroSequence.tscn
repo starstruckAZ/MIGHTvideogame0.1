@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8j6y8q3x4n5m"]
+
+[ext_resource type="Script" uid="uid://ba6f7ol0r1qva" path="res://scripts/IntroSequence.gd" id="1_2k4m3"]
+
+[node name="IntroSequence" type="Node"]
+script = ExtResource("1_2k4m3")
